@@ -1,9 +1,13 @@
-package com.example.todolistapp
+package com.example.todolistapp.updatescreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todolistapp.database.Todo
+import com.example.todolistapp.repository.TodoRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UpdateTodoViewModel(private val repository: TodoRepository) : ViewModel() {
 
@@ -12,7 +16,10 @@ class UpdateTodoViewModel(private val repository: TodoRepository) : ViewModel() 
 
     fun getUpdatedTodo(id: Long) {
         viewModelScope.launch {
-            _selectedTodo.value = repository.getTodoById(id)
+            withContext(Dispatchers.IO){
+
+                _selectedTodo.postValue(repository.getTodoById(id))
+            }
         }
     }
 

@@ -1,6 +1,8 @@
-package com.example.todolistapp
+package com.example.todolistapp.repository
 
 import androidx.lifecycle.LiveData
+import com.example.todolistapp.database.Todo
+import com.example.todolistapp.database.TodoDao
 
 class TodoRepository(private val todoDao: TodoDao) {
 

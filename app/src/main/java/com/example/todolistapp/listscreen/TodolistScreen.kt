@@ -1,10 +1,14 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -17,11 +21,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.todolistapp.Todo
-import com.example.todolistapp.TodoListViewModel
+import com.example.todolistapp.database.Todo
+import com.example.todolistapp.listscreen.TodoListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,9 +73,11 @@ fun TodoList(
     onDelete: (Todo) -> Unit,
     onUpdate: (Todo) -> Unit
 ) {
+    val colors = listOf(Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Cyan, Color.Magenta)
     LazyColumn {
         items(todos) { todo ->
-            TodoItem(todo = todo, onDelete = onDelete, onUpdate = onUpdate)
+            val backgroundColor = colors[todos.indexOf(todo) % colors.size]
+            TodoItem(todo = todo, onDelete = onDelete, onUpdate = onUpdate,backgroundColor = backgroundColor)
         }
     }
 }
@@ -78,12 +86,37 @@ fun TodoList(
 fun TodoItem(
     todo: Todo,
     onDelete: (Todo) -> Unit,
-    onUpdate: (Todo) -> Unit
+    onUpdate: (Todo) -> Unit,
+    backgroundColor: Color
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Delete Confirmation") },
+            text = { Text("Are you sure you want to delete this item?") },
+            confirmButton = {
+                Button(onClick = {
+                    onDelete(todo)
+                    showDialog = false
+                }) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDialog = false }) {
+                    Text("No")
+                }
+            }
+        )
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(backgroundColor.copy(alpha = 0.05f)).padding(start = 16.dp).padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
@@ -91,7 +124,7 @@ fun TodoItem(
         ) {
             Text(
                 text = todo.title,
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -104,7 +137,7 @@ fun TodoItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { onDelete(todo) }) {
+            IconButton(onClick = { showDialog = true }) {
                 Icon(Icons.Default.Delete, contentDescription = "Delete")
             }
             IconButton(onClick = { onUpdate(todo) }) {

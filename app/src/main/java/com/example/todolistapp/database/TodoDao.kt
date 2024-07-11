@@ -1,4 +1,4 @@
-package com.example.todolistapp
+package com.example.todolistapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

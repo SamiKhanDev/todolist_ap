@@ -1,8 +1,9 @@
-package com.example.todolistapp
+package com.example.todolistapp.addscreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -15,9 +16,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.todolistapp.R
+import com.example.todolistapp.database.Todo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +59,7 @@ fun AddTodoScreen(navController: NavHostController, viewModel: AddTodoViewModel)
                 },
                 isError = titleError,
                 label = { Text("Title") },
+                leadingIcon = { Icon(painterResource(id = R.drawable.ic_title), contentDescription = "Title Icon") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
@@ -67,6 +72,7 @@ fun AddTodoScreen(navController: NavHostController, viewModel: AddTodoViewModel)
                 },
                 isError = descriptionError,
                 label = { Text("Description") },
+                leadingIcon = { Icon(painterResource(id = R.drawable.ic_description), contentDescription = "description Icon") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.weight(1f))
