@@ -1,5 +1,6 @@
 package com.example.todolistapp
 
+import com.example.todolistapp.completescreen.CompleteTodoViewModel
 import com.example.todolistapp.addscreen.AddTodoViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,14 @@ class UpdateTodoViewModelFactory(private val repository: TodoRepository) : ViewM
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UpdateTodoViewModel::class.java)) {
             return UpdateTodoViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+class CompleteTodoViewModelFactory(private val repository: TodoRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(CompleteTodoViewModel::class.java)) {
+            return CompleteTodoViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

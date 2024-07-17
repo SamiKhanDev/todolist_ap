@@ -1,6 +1,7 @@
 package com.example.todolistapp.listscreen
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolistapp.database.Todo
@@ -18,4 +19,11 @@ class TodoListViewModel(private val repository: TodoRepository) : ViewModel() {
             repository.delete(todo)
         }
     }
+    fun completeTodo(todo: Todo) {
+        viewModelScope.launch {
+            todo.isCompleted = true
+            repository.complete(todo)
+        }
+    }
+
 }

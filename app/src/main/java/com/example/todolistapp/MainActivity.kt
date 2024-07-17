@@ -1,26 +1,17 @@
 package com.example.todolistapp
 
+import CompleteTodoScreen
+import com.example.todolistapp.completescreen.CompleteTodoViewModel
 import TodoListScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -106,6 +97,15 @@ fun SetupNavGraph(navController: NavHostController) {
                 viewModel = updateTodoViewModel,
                 todoId = backStackEntry.arguments?.getLong("todoId") ?: 0L
             )
+
+        }
+        composable(
+            route = "completed_todo",
+        ) {
+            val completeTodoViewModel: CompleteTodoViewModel = viewModel(factory = CompleteTodoViewModelFactory(
+                TodoRepository(dataBase.todoDao())
+            ))
+            CompleteTodoScreen(navController, completeTodoViewModel)
         }
     }
 }

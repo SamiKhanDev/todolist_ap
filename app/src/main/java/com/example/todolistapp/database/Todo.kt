@@ -9,5 +9,6 @@ data class Todo(
     val title: String,
     val description: String,
     val date: String,
-    val time: String
+    val time: String,
+    var isCompleted: Boolean = false
 )
